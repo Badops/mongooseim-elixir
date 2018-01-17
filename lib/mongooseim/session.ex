@@ -12,15 +12,15 @@ defmodule Mongooseim.Sessions do
 
     @endpoint "sessions/"
 
-    def get_sessions(XMPPhost_id) do
-        Mongooseim.request(:get, full_endpoint(XMPPhost_id))
+    def get_sessions(xmpp_host) do
+        Mongooseim.request(:get, full_endpoint(xmpp_host))
     end
 
-    def delete_sessions(XMPPhost_id, username \\ "", resource_name \\ "") do
-        Mongooseim.request(:delete, full_endpoint(XMPPhost_id) <> username <> resource_name)
+    def delete_sessions(xmpp_host, username \\ "", resource_name \\ "") do
+        Mongooseim.request(:delete, full_endpoint(xmpp_host) <> username <> resource_name)
     end
 
-    def full_endpoint(id \\ "") do
-        @endpoint <> id
+    def full_endpoint(param \\ "") do
+        @endpoint <> param
     end
 end

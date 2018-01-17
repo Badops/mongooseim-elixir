@@ -17,7 +17,7 @@ defmodule Mongooseim.Contact do
 
     #contact_id in this function is a map with a string key, e.g { "jid": "alice@wonderland.lit"}
     def post_contact(contact_id \\ "") do
-        Mongooseim.request(:post, full_endpoint(user_id), contact_id)
+        Mongooseim.request(:post, full_endpoint(), contact_id)
     end
 
     def delete_contact(user_id, contact_id) do

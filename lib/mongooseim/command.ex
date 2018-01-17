@@ -9,7 +9,11 @@ defmodule Mongooseim.Command do
 
     @endpoint "commands/"
 
-    def get_command(opts \\ []) do
-        Mongooseim.request(:get,@endpoint, opts)
+    def get_commands(opts \\ []) do
+        Mongooseim.request(:get, full_endpoint(), "", opts)
+    end
+
+    defp full_endpoint(param \\ "") do
+        @endpoint <> param
     end
 end
