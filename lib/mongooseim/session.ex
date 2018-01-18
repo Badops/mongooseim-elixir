@@ -1,23 +1,23 @@
-defmodule Mongooseim.Sessions do
-
+defmodule Mongooseim.Session do
     @moduledoc """
-
         This module contains the public API functions for interfacing with Mongooseim endpoint.
     """
 
 	## XMPPhost_id: string
 	## username: string
     ## resource_name: string 
+    ## xmpp_host: string
     
+    @xmpp_host Application.get_env(:mongooseim, :xmpp_host)
+    @endpoint "sessions/#{@xmpp_host}/"
 
-    @endpoint "sessions/"
-
-    def get_sessions(xmpp_host) do
-        Mongooseim.request(:get, full_endpoint(xmpp_host))
+    def get_sessions(opts \\ []) do
+        Mongooseim.request(:get, full_endpoint(), "", opts)
     end
 
-    def delete_sessions(xmpp_host, username \\ "", resource_name \\ "") do
-        Mongooseim.request(:delete, full_endpoint(xmpp_host) <> username <> resource_name)
+    def delete_session(username, resource_name, opts \\ []) do
+        conc_path_params = username <> resource_name
+        Mongooseim.request(:delete, full_endpoint(conc_path_params), "", opts)
     end
 
     def full_endpoint(param \\ "") do

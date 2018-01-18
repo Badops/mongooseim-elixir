@@ -1,41 +1,43 @@
 defmodule Mongooseim.Contact do
-
     @moduledoc """
-
         This module contains the public API functions for interfacing with Mongooseim endpoint.
     """
 
-	## user_id: string
+	## user: string(the JID of the user)
 	## contact_id: string
     ## action_body_params: a map with string keys
 
-@endpoint "contacts/"
+    @endpoint "contacts/"
 
-    def get_contact(user_id) do
-        Mongooseim.request(:get, full_endpoint(user_id))
+    def get_contact(user, opts \\ []) do
+        Mongooseim.request(:get, full_endpoint(user), "", opts)
     end
 
-    #contact_id in this function is a map with a string key, e.g { "jid": "alice@wonderland.lit"}
-    def post_contact(contact_id \\ "") do
-        Mongooseim.request(:post, full_endpoint(), contact_id)
+    #contact in this function is a map with a string key, e.g { "jid": "alice@wonderland.lit"}
+    def post_contact(user, contact, opts \\ []) do
+        Mongooseim.request(:post, full_endpoint(user), contact, opts)
     end
 
-    def delete_contact(user_id, contact_id) do
-        Mongooseim.request(:delete, full_endpoint(user_id) <> contact_id)
+    def delete_contact(user, contact, opts \\ []) do
+        conc_path_params = user <> "/" <> contact
+        Mongooseim.request(:delete, full_endpoint(conc_path_params), "", opts)
     end
 
-    #Action_body _params is a body parameter that can either be "subscribe" or "subscribed"
-    def manage_subscription(user_id, contact_id,  action_body_params \\ "") do
-        Mongooseim.request(:put, full_endpoint(user_id) <> contact_id, action_body_params)
+    # action_body _params is a body parameter that can either be "subscribe" or "subscribed"
+    def manage_subscription(user, contact,  action_body_params, opts \\ []) do
+        conc_path_params = user <> "/" <> contact
+        Mongooseim.request(:put, full_endpoint(conc_path_params), action_body_params, opts)
     end
 
-    #Action_body _params is a body parameter that can either be "connect" or "disconnect"
-    def manage_contact(user_id, contact_id \\ "",  action_body_params \\ "") do
-        Mongooseim.request(:put, full_endpoint(user_id) <> contact_id <> "/manage", action_body_params)
+    # action_body _params is a body parameter that can either be "connect" or "disconnect"
+    def manage_contact(user, contact,  action_body_params, opts \\ []) do
+        conc_path_params = user <> "/" <> contact <> "/manage"
+        IO.inspect conc_path_params
+        Mongooseim.request(:put, full_endpoint(conc_path_params), action_body_params, opts)
     end
 
-    defp full_endpoint(id \\ "") do
-        @endpoint <> id
+    defp full_endpoint(param \\ "") do
+        @endpoint <> param
     end
 end
 
